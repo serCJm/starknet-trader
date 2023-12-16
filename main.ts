@@ -2,9 +2,8 @@ import { GLOBAL_CONFIG } from "./MODULES_CONFIG.js";
 import { config } from "./config.js";
 import { WalletManager } from "./data/wallet-data.js";
 import { runModules } from "./src/runModules.js";
-import { STARKNET_WALLET_TYPES, WalletDataType } from "./src/types.js";
+import { WalletDataType } from "./src/types.js";
 import { countdownTimer } from "./src/utils/countdownTimer.js";
-import { getWallets } from "./src/utils/db.js";
 import { errorHandler } from "./src/utils/errorHandler.js";
 import { logger } from "./src/utils/logger.js";
 import { shuffleArr } from "./src/utils/utils.js";
@@ -42,11 +41,11 @@ async function processWallets(wallets: WalletDataType[]) {
 }
 
 async function main() {
-	const { WALLETS_RANGE, WALLETS_TYPE } = config;
+	const { SECRET_WALLET_DATA } = config;
 	let wallets: WalletDataType[] = [];
-	if (WALLETS_TYPE === "db")
-		wallets = await getWallets(WALLETS_RANGE, STARKNET_WALLET_TYPES.ARGENT);
-	// if (WALLETS_TYPE === "ENV") wallets = SECRET_WALLET_DATA;
+	// if (WALLETS_TYPE === "db")
+	// 	wallets = await getWallets(WALLETS_RANGE, STARKNET_WALLET_TYPES.ARGENT);
+	wallets = SECRET_WALLET_DATA;
 
 	wallets = shuffleArr(wallets);
 

@@ -3,7 +3,7 @@ import { Contract, num, validateAndParseAddress } from "starknet";
 import { AVNU_ABI } from "../../data/abis/AvnuABI.js";
 import { ProviderManager } from "../../data/chain-data.js";
 import { WalletManager } from "../../data/wallet-data.js";
-import { TokensType } from "../types.js";
+import { DexConfig, TokensType } from "../types.js";
 import { GotManager } from "../utils/gotManager.js";
 import { logger } from "../utils/logger.js";
 import { sendTransaction } from "../utils/web3/sendTransaction.js";
@@ -20,7 +20,7 @@ type TransactionData = {
 // https://app.avnu.fi
 export class AVNU extends DEX {
 	static contractAddress = validateAndParseAddress(
-		"0x04270219d365d6b017231b52e92b3fb5d7c8378b05e9abc97724537a80e93b0f"
+		"0x04270219d365d6b017231b52e92b3fb5d7c8378b05e9abc97724537a80e93b0f",
 	);
 	#avnuRouter: Contract;
 
@@ -32,7 +32,7 @@ export class AVNU extends DEX {
 		this.#avnuRouter = new Contract(
 			AVNU_ABI,
 			AVNU.contractAddress,
-			ProviderManager.starknet
+			ProviderManager.starknet,
 		);
 
 		this.#got = GotManager.got.extend({
@@ -59,7 +59,7 @@ export class AVNU extends DEX {
 				"https://starknet.api.avnu.fi/swap/v1/quotes",
 				{
 					searchParams,
-				}
+				},
 			).json();
 
 			if (response) {
@@ -72,9 +72,11 @@ export class AVNU extends DEX {
 	}
 
 	async #buildTransaction(quoteId: string): Promise<TransactionData> {
+		const slippage = (this.config as DexConfig).SLIPPAGE || 0.01;
+
 		const json = {
 			quoteId,
-			slippage: 0.01,
+			slippage,
 			takerAddress: WalletManager.starkAddress,
 		};
 
@@ -105,7 +107,7 @@ export class AVNU extends DEX {
 
 		const { amount, approveData } = await setupAmountData(
 			this.fromToken,
-			AVNU.contractAddress
+			AVNU.contractAddress,
 		);
 
 		const quoteId = await this.#getQuote(num.toHex(amount.low));

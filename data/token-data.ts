@@ -24,7 +24,7 @@ export class TokenManager {
 			address:
 				"0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
 			decimals: 18,
-			MINMAX_SWAP_PERCENT: [5, 10],
+			MINMAX_SWAP_PERCENT: [50, 70],
 		},
 		[TOKENS.USDC]: {
 			address:
@@ -45,8 +45,9 @@ export class TokenManager {
 			MINMAX_SWAP_PERCENT: [],
 		},
 		[TOKENS.BLACK]: {
-			address: "",
-			decimals: 6,
+			address:
+				"0x03a6ec0b0ea7a1903329d5dec4bb574ecb4d6fdc206664e1c61eeded8158ab40",
+			decimals: 18,
 			MINMAX_SWAP_PERCENT: [],
 		},
 	};

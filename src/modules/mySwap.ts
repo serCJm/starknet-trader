@@ -1,6 +1,7 @@
 import { CallData, Contract, Uint256, validateAndParseAddress } from "starknet";
 import { mySwapRouterABI } from "../../data/abis/mySwapRouterABI.js";
 import { ProviderManager } from "../../data/chain-data.js";
+import { DexConfig } from "../types.js";
 import {
 	getAmountWithSlippage,
 	getProportionalAmount,
@@ -53,7 +54,10 @@ export class MySwap extends DEX {
 			reserve1,
 			reserve0,
 		);
-		const amountOutMin = getAmountWithSlippage(amountOut, 0.5);
+
+		const slippage = (this.config as DexConfig).SLIPPAGE || 1;
+
+		const amountOutMin = getAmountWithSlippage(amountOut, slippage);
 
 		const txData = {
 			pool_id: poolId,

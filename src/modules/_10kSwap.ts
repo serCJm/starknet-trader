@@ -3,6 +3,7 @@ import { _10kSwapFactoryABI } from "../../data/abis/_10kSwapFactoryABI.js";
 import { _10kSwapRouterABI } from "../../data/abis/_10kSwapRouterABI.js";
 import { ProviderManager } from "../../data/chain-data.js";
 import { WalletManager } from "../../data/wallet-data.js";
+import { DexConfig } from "../types.js";
 import { getAmountWithSlippage, getDeadline } from "../utils/utils.js";
 import { sendTransaction } from "../utils/web3/sendTransaction.js";
 import { setupAmountData } from "../utils/web3/setupAmountData.js";
@@ -77,7 +78,9 @@ export class _10kSwap extends DEX {
 
 		const amountIn = amounts[0];
 
-		const amountInMin = getAmountWithSlippage(amountIn, 1);
+		const slippage = (this.config as DexConfig).SLIPPAGE || 1;
+
+		const amountInMin = getAmountWithSlippage(amountIn, slippage);
 		return [amountIn, amountInMin];
 	}
 }

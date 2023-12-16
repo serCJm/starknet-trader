@@ -2,6 +2,7 @@ import { CallData, Contract, Uint256, validateAndParseAddress } from "starknet";
 import { SithSwapRouterABI } from "../../data/abis/SithSwapRouterABI.js";
 import { ProviderManager } from "../../data/chain-data.js";
 import { WalletManager } from "../../data/wallet-data.js";
+import { DexConfig } from "../types.js";
 import { getAmountWithSlippage, getDeadline } from "../utils/utils.js";
 import { sendTransaction } from "../utils/web3/sendTransaction.js";
 import { setupAmountData } from "../utils/web3/setupAmountData.js";
@@ -34,7 +35,9 @@ export class SithSwap extends DEX {
 
 		const { amount: amountOut, stable } =
 			await this.#getAmountOut(amountIn);
-		const amountOutMin = getAmountWithSlippage(amountOut, 0.5);
+
+		const slippage = (this.config as DexConfig).SLIPPAGE || 1;
+		const amountOutMin = getAmountWithSlippage(amountOut, slippage);
 
 		const routes = [
 			{

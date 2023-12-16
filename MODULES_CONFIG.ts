@@ -43,6 +43,7 @@ export const GLOBAL_CONFIG = {
 	MINMAX_WALLET_WAIT_TIME: [60 * 15, 60 * 45], // seconds
 	MINMAX_MODULES_WAIT_TIME: [0, 0], // seconds
 	ORDER: ORDER.ONE_RANDOM,
-	MAX_ETH_GWEI: 100, // number or null for current gwei
+	MAX_ETH_GWEI: 100, // number or null for current gwei,
+	MAX_FEE_INCREASE: 50, // percent to increase by
 	NOTIFY_TELEGRAM: false, // true/false. Note, need to set up Telegram bot
 };

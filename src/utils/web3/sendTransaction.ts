@@ -10,16 +10,17 @@ export async function sendTransaction(calls: Call[], customMessage?: string) {
 	if (GLOBAL_CONFIG.MAX_ETH_GWEI) await waitForETHGas();
 	logger.info`### Starting sendTransaction ###`;
 
-	const { suggestedMaxFee } = await WalletManager.starknetSigner.estimateFee(
-		calls
-	);
+	const { suggestedMaxFee } =
+		await WalletManager.starknetSigner.estimateFee(calls);
+
+	const percentageIncrease = GLOBAL_CONFIG.MAX_FEE_INCREASE || 10;
 
 	const txResp = await WalletManager.starknetSigner.execute(
 		calls,
 		undefined,
 		{
-			maxFee: (suggestedMaxFee * 11n) / 10n,
-		}
+			maxFee: (suggestedMaxFee * BigInt(100 + percentageIncrease)) / 100n,
+		},
 	);
 
 	await getTransactionState(txResp, customMessage);
